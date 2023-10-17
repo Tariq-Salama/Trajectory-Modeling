@@ -1,0 +1,59 @@
+/**
+ * A program that prompts the user for a distance to the target, and then exhaustively searches all speeds between 
+ * 1.0 m/s and 30.0 m/s in increments of 1.0 (so 1.0, 2.0, 3.0, etc. up to 30.0) and all angles between 25.0 and 
+ * 90.0 in increments of 5.0 (25.0, 30.0, 35.0, 4.0, etc. up to 90.0) to find the best angle and initial speed to 
+ * hit the target. It will report the best angle, best speed, actual distance travelled, and distance to the target 
+ * to two decimal places.
+ * 
+ * @author Tariq Salama
+ * @version 20231016
+ **/
+import java.util.Scanner;
+public class TrajectoryModeling {
+
+	public static void main(String[] args) {
+      // Create a Scanner object for user input
+      Scanner scnr = new Scanner(System.in);
+      
+      // Prompt the user for the distance to the target
+      System.out.println("Enter a distance to target: ");
+      double distance = scnr.nextDouble();
+      
+      double bestAngle = 0;
+      double bestSpeed = 0;
+      double bestDistance = Double.MAX_VALUE;
+      double g = 9.8;
+      
+      for (int speed = 1; speed <= 30; speed++) {
+         for (int angle = 25; angle <= 90; angle += 5) {
+      
+      // Calculate the time it took to travel using the projectile motion formula
+      double t = ((2 * speed) * Math.sin(Math.toRadians(angle))) / g;
+      
+      // Calculate the distance traveled using the projectile motion formula
+      double d = (speed * t * Math.cos(Math.toRadians(angle)));
+      
+      
+      // Check if the current combination is closer to the target
+      if (Math.abs(d - distance) < Math.abs(bestDistance - distance)) {
+          bestAngle = angle;
+          bestSpeed = speed;
+          bestDistance = d;  
+            }
+         }
+      }
+   
+     
+     // Prints the results with two decimal places
+     System.out.format("Best angle: %.2f%n", bestAngle);
+     
+     System.out.format("Best speed: %.2f%n", bestSpeed);
+     
+     System.out.format("Distance travelled: %.2f%n", bestDistance);
+     
+     
+     // Calculate the miss distance and prints out results
+     System.out.format("Missed the target center by: %.2f%n", (distance - bestDistance));
+	}
+
+}
